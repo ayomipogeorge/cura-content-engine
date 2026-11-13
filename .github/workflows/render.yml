@@ -1,0 +1,59 @@
+name: Render videos
+
+on:
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Only videos whose id starts with this (e.g. s02). Leave empty for all."
+        required: false
+        default: ""
+      preview:
+        description: "Fast 540x960 preview instead of the 4K master"
+        type: boolean
+        default: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version | head -1
+
+      - run: npm ci
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Sound kit
+        run: npm run sfx
+
+      - name: Voiceover (Gemini TTS)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CURA_VOICE: ${{ vars.CURA_VOICE }}
+        run: npm run voiceover -- ${{ inputs.only }}
+
+      - name: Render
+        run: |
+          if [ "${{ inputs.preview }}" = "true" ]; then
+            npm run render -- ${{ inputs.only }} --preview
+          else
+            npm run render -- ${{ inputs.only }}
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cura-videos-${{ github.run_number }}
+          path: out/*.mp4
+          retention-days: 30

@@ -1,0 +1,7 @@
+node_modules/
+out/
+.env
+*.log
+public/vo/**/*.wav
+!public/vo/.gitkeep
+public/sfx/*.wav

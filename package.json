@@ -1,0 +1,32 @@
+{
+  "name": "cura-content-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cura's motion-explainer video engine: scripts in, 4K vertical videos out.",
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio",
+    "sfx": "node tools/sfx.mjs",
+    "voiceover": "tsx tools/voiceover.ts",
+    "render": "node tools/render.mjs",
+    "render:preview": "node tools/render.mjs --preview",
+    "typecheck": "tsc --noEmit",
+    "sheets": "node tools/contact-sheet.mjs"
+  },
+  "dependencies": {
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
+    "@remotion/bundler": "4.0.543",
+    "@remotion/cli": "4.0.543",
+    "@remotion/fonts": "^4.0.543",
+    "@remotion/renderer": "4.0.543",
+    "@remotion/transitions": "4.0.543",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.543"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "^5.6.0"
+  }
+}
