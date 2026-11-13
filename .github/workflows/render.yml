@@ -12,6 +12,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 jobs:
   render:
     runs-on: ubuntu-latest
@@ -43,6 +46,23 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           CURA_VOICE: ${{ vars.CURA_VOICE }}
         run: npm run voiceover -- ${{ inputs.only }}
+
+      # Keep every generated voice line in the repo, so later renders reuse it
+      # instead of spending Gemini quota again. Runs even if the voiceover step
+      # stopped partway (e.g. daily quota), so finished lines are never lost.
+      - name: Save voiceover to the repo
+        if: always()
+        run: |
+          git config user.name "cura-render-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add public/vo src/generated/vo-manifest.json
+          if git diff --cached --quiet; then
+            echo "No new voiceover."
+          else
+            git commit -m "Voiceover: ${{ inputs.only || 'all videos' }}"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
 
       - name: Render
         run: |

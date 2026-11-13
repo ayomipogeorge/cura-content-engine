@@ -62,15 +62,21 @@ async function tts(text: string): Promise<Buffer> {
       return Buffer.from(data, "base64");
     }
     const body = await res.text();
+    if (res.status === 429 && /per.?day|PerDay|daily/i.test(body)) {
+      throw new Error(
+        "Gemini's free daily text-to-speech quota is used up. It resets at midnight Pacific time (9am in Lagos). " +
+          "Lines already generated are saved in the repo, so the next run only creates the missing ones.\n" + body.slice(0, 600),
+      );
+    }
     if (res.status === 429 || res.status >= 500) {
       const wait = 15000 * attempt;
-      console.warn(`  ${res.status}, retrying in ${wait / 1000}s`);
+      console.warn(`  ${res.status}, retrying in ${wait / 1000}s: ${body.slice(0, 200).replace(/\s+/g, " ")}`);
       await new Promise((r) => setTimeout(r, wait));
       continue;
     }
     throw new Error(`Gemini TTS ${res.status}: ${body.slice(0, 400)}`);
   }
-  throw new Error("Gemini TTS: too many retries");
+  throw new Error("Gemini TTS: still rate-limited after 4 tries. Wait a few minutes and run again; finished lines are kept.");
 }
 
 async function main() {
