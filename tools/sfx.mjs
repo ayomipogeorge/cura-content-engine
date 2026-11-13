@@ -17,15 +17,8 @@ make(
   0.7,
 );
 
-// UI tap.
-make("click", "sine=f=1650:d=0.05,afade=t=out:st=0.008:d=0.042,volume=0.6", 0.05);
-
-// Gentle two-note confirmation for every "Paid" moment.
-make(
-  "paid",
-  "sine=f=880:d=0.16,afade=t=out:st=0.08:d=0.08[a];sine=f=1318.5:d=0.45,afade=t=in:d=0.01,afade=t=out:st=0.1:d=0.35[b];[a][b]concat=n=2:v=0:a=1,volume=0.5",
-  0.61,
-);
+// No UI tap or "paid" tones: the Cura brand guide (section 10) rules out
+// sound effects for interactions. Only a transition air and a quiet bed.
 
 // Warm, quiet ambient bed (A major pad with slow movement), 90 s, looped in the video.
 make(

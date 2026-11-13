@@ -1,7 +1,8 @@
 import React from "react";
 import { AbsoluteFill, Audio, Sequence, getStaticFiles, interpolate, staticFile, useCurrentFrame } from "remotion";
 import { TransitionSeries } from "@remotion/transitions";
-import { fontFamily } from "./fonts";
+import { fonts } from "./fonts";
+import { Overline } from "./components/primitives";
 import { brand, CANVAS, TRANSITION_FRAMES } from "./brand";
 import { useSpringIn } from "./components/anim";
 import { DashboardScene, DocumentScene, StackScene } from "./scenes/Stack";
@@ -61,7 +62,7 @@ const Backdrop: React.FC<{ dark?: boolean }> = ({ dark }) => {
           borderRadius: "50%",
           left: -300 + Math.sin(frame * 0.01) * 40,
           top: -260 + Math.cos(frame * 0.012) * 30,
-          background: dark ? "rgba(47,210,154,0.10)" : "rgba(15,107,87,0.07)",
+          background: dark ? "rgba(26,50,96,0.55)" : "rgba(245,158,11,0.10)",
         }}
       />
       <div
@@ -72,39 +73,46 @@ const Backdrop: React.FC<{ dark?: boolean }> = ({ dark }) => {
           borderRadius: "50%",
           right: -280 + Math.cos(frame * 0.009) * 40,
           bottom: -200 + Math.sin(frame * 0.011) * 30,
-          background: dark ? "rgba(244,181,63,0.08)" : "rgba(244,181,63,0.10)",
+          background: dark ? "rgba(26,50,96,0.6)" : "rgba(15,31,61,0.04)",
         }}
       />
     </AbsoluteFill>
   );
 };
 
-const Headline: React.FC<{ text: string; delay: number; dark?: boolean; overMedia?: boolean }> = ({ text, delay, dark, overMedia }) => {
+const Headline: React.FC<{ text: string; label: string; delay: number; dark?: boolean; overMedia?: boolean }> = ({ text, label, delay, dark, overMedia }) => {
   const words = text.split(" ");
+  const labelIn = useSpringIn(Math.max(0, delay - 4));
   return (
+    <>
+    <div style={{ position: "absolute", top: 150, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: labelIn }}>
+      <Overline size={30}>{label}</Overline>
+    </div>
     <div
       style={{
         position: "absolute",
-        top: 190,
+        top: 210,
         left: 70,
         right: 70,
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
         gap: "0 22px",
-        fontSize: 92,
-        fontWeight: 800,
-        letterSpacing: -2.5,
-        lineHeight: 1.05,
-        color: dark || overMedia ? c.paper : c.ink,
+        fontFamily: fonts.display,
+        fontSize: 90,
+        fontWeight: 700,
+        letterSpacing: -0.5,
+        lineHeight: 1.1,
+        color: dark || overMedia ? c.card : c.ink,
         textAlign: "center",
         textShadow: overMedia ? "0 4px 30px rgba(0,0,0,0.35)" : undefined,
       }}
     >
       {words.map((w, i) => (
-        <Word key={i} word={w} delay={delay + i * 3} />
+        <Word key={i} word={w} delay={delay + i * 2} />
       ))}
     </div>
+    </>
   );
 };
 
@@ -112,7 +120,7 @@ const Word: React.FC<{ word: string; delay: number }> = ({ word, delay }) => {
   const s = useSpringIn(delay, { damping: 14, stiffness: 150 });
   return (
     <span style={{ display: "inline-block", overflow: "hidden", paddingBottom: 8 }}>
-      <span style={{ display: "inline-block", transform: `translateY(${(1 - s) * 110}%)` }}>{word}</span>
+      <span style={{ display: "inline-block", transform: `translateY(${(1 - s) * 100}%)` }}>{word}</span>
     </span>
   );
 };
@@ -136,18 +144,19 @@ const Captions: React.FC<{ text: string; start: number; frames: number; dark?: b
     index = i;
   }
   const chunkStart = chunks.slice(0, index).reduce((n, ch) => n + ch.length, 0) * perWord;
-  const pop = interpolate(local - chunkStart, [0, 5], [0.92, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const pop = interpolate(local - chunkStart, [0, 4], [0.96, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <div style={{ position: "absolute", left: 60, right: 60, bottom: 230, display: "flex", justifyContent: "center" }}>
       <div
         style={{
-          background: "rgba(12, 43, 39, 0.88)",
-          color: c.paper,
-          fontSize: 50,
-          fontWeight: 700,
-          lineHeight: 1.25,
+          background: "rgba(15, 31, 61, 0.92)",
+          color: c.card,
+          fontFamily: fonts.body,
+          fontSize: 48,
+          fontWeight: 600,
+          lineHeight: 1.3,
           padding: "18px 34px",
-          borderRadius: 26,
+          borderRadius: brand.buttonRadius,
           textAlign: "center",
           transform: `scale(${pop})`,
           maxWidth: 900,
@@ -166,12 +175,12 @@ const SceneFrame: React.FC<{ script: VideoScript; scene: Scene; index: number; f
   const isEnd = scene.visual.kind === "end";
   const isClip = scene.visual.kind === "clip";
   return (
-    <AbsoluteFill style={{ fontFamily }}>
+    <AbsoluteFill style={{ fontFamily: fonts.body, color: script.dark ? c.card : c.ink }}>
       <Backdrop dark={script.dark} />
       <VisualFor v={scene.visual} dark={script.dark} />
-      {!isEnd ? <Headline text={scene.text} delay={index === 0 ? 2 : TRANSITION_FRAMES - 4} dark={script.dark} overMedia={isClip} /> : null}
+      {!isEnd ? <Headline text={scene.text} label={script.pillar} delay={index === 0 ? 2 : TRANSITION_FRAMES - 4} dark={script.dark} overMedia={isClip} /> : null}
       {scene.note ? (
-        <div style={{ position: "absolute", bottom: 150, left: 0, right: 0, textAlign: "center", fontSize: 28, color: script.dark ? c.paper : c.muted, opacity: 0.85 }}>
+        <div style={{ position: "absolute", bottom: 150, left: 0, right: 0, textAlign: "center", fontSize: 28, color: script.dark ? c.card : c.muted, opacity: 0.85 }}>
           {scene.note}
         </div>
       ) : null}
@@ -216,24 +225,12 @@ export const CuraVideo: React.FC<{ script: VideoScript }> = ({ script }) => {
       </TransitionSeries>
       {sfx ? (
         <>
-          {hasStatic("sfx/bed.wav") ? <Audio src={staticFile("sfx/bed.wav")} volume={0.12} loop /> : null}
+          {hasStatic("sfx/bed.wav") ? <Audio src={staticFile("sfx/bed.wav")} volume={0.1} loop /> : null}
           {starts.slice(1).map((s, i) => (
             <Sequence key={`w-${i}`} from={Math.max(0, s - 2)} durationInFrames={30} layout="none">
-              <Audio src={staticFile("sfx/whoosh.wav")} volume={0.35} />
+              <Audio src={staticFile("sfx/whoosh.wav")} volume={0.18} />
             </Sequence>
           ))}
-          {script.scenes.map((scene, i) =>
-            scene.visual.kind === "pay" ? (
-              <React.Fragment key={`pay-${i}`}>
-                <Sequence from={starts[i] + 26} durationInFrames={15} layout="none">
-                  <Audio src={staticFile("sfx/click.wav")} volume={0.5} />
-                </Sequence>
-                <Sequence from={starts[i] + 60} durationInFrames={45} layout="none">
-                  <Audio src={staticFile("sfx/paid.wav")} volume={0.45} />
-                </Sequence>
-              </React.Fragment>
-            ) : null,
-          )}
         </>
       ) : null}
     </AbsoluteFill>

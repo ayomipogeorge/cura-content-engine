@@ -2,7 +2,8 @@ import React from "react";
 import { AbsoluteFill, interpolate, useCurrentFrame } from "remotion";
 import { brand, naira } from "../brand";
 import { useProgress, useSpringIn } from "../components/anim";
-import { Arrow, Card, Person, Pill, Tick } from "../components/primitives";
+import { Arrow, Card, IconCircle, Overline, Person, Pill, Tick } from "../components/primitives";
+import { fonts } from "../fonts";
 import type { Visual } from "../types";
 
 const c = brand.colors;
@@ -28,9 +29,9 @@ const Bubbles: React.FC<{ items: string[]; target: string }> = ({ items, target 
       ))}
       <div style={{ position: "absolute", top: 1130, transform: `scale(${desk})` }}>
         <Card style={{ width: 520, display: "flex", alignItems: "center", gap: 28, padding: 30 }}>
-          <Person size={110} />
+          <IconCircle name="employer" size={110} />
           <div>
-            <div style={{ fontSize: 46, fontWeight: 800 }}>{target}</div>
+            <div style={{ fontSize: 46, fontWeight: 700 }}>{target}</div>
             <div style={{ fontSize: 30, color: c.muted }}>Inbox: full</div>
           </div>
         </Card>
@@ -55,15 +56,15 @@ const Bubble: React.FC<{ text: string; delay: number; spot: { x: number; y: numb
       <div
         style={{
           background: c.card,
-          borderRadius: 40,
-          borderBottomLeftRadius: 8,
+          borderRadius: 28,
+          borderBottomLeftRadius: 6,
           padding: "26px 36px",
           fontSize: 38,
           fontWeight: 700,
           color: c.ink,
           boxShadow: brand.shadow,
           whiteSpace: "nowrap",
-          borderLeft: `8px solid ${c.alert}`,
+          borderLeft: `10px solid ${c.alert}`,
         }}
       >
         {text}
@@ -101,8 +102,8 @@ const SlamCard: React.FC<{ text: string; amount: number; delay: number; i: numbe
     >
       <Card style={{ width: 680, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "40px 44px" }}>
         <div>
-          <div style={{ fontSize: 28, color: c.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>Due now</div>
-          <div style={{ fontSize: 48, fontWeight: 800 }}>{text}</div>
+          <Overline size={24} color={c.alert}>Due now</Overline>
+          <div style={{ fontSize: 46, fontWeight: 700, whiteSpace: "nowrap" }}>{text}</div>
         </div>
         <Pill tone="bad" size={34}>
           {naira(amount)}
@@ -150,7 +151,7 @@ const StepRow: React.FC<{ text: string; n: number; delay: number }> = ({ text, n
             background: c.ink,
             color: c.paper,
             fontSize: 46,
-            fontWeight: 800,
+            fontWeight: 700,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -163,7 +164,7 @@ const StepRow: React.FC<{ text: string; n: number; delay: number }> = ({ text, n
         </div>
       </div>
       <Card style={{ padding: "34px 44px", width: 560 }}>
-        <div style={{ fontSize: 50, fontWeight: 800 }}>{text}</div>
+        <div style={{ fontSize: 50, fontWeight: 700 }}>{text}</div>
       </Card>
     </div>
   );
@@ -184,8 +185,8 @@ export const DashboardScene: React.FC<{ v: Extract<Visual, { kind: "dashboard" }
         <Card style={{ width: 880, padding: 44 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 26 }}>
             <div>
-              <div style={{ fontSize: 28, color: c.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>Employer dashboard</div>
-              <div style={{ fontSize: 48, fontWeight: 800 }}>Team health budgets</div>
+              <Overline size={24}>Employer dashboard</Overline>
+              <div style={{ fontFamily: fonts.display, fontSize: 52, fontWeight: 600 }}>Team health budgets</div>
             </div>
             <Pill size={28}>Monthly</Pill>
           </div>
@@ -204,7 +205,7 @@ export const DashboardScene: React.FC<{ v: Extract<Visual, { kind: "dashboard" }
                   borderTop: `2px solid ${c.line}`,
                   opacity: rowIn,
                   transform: `translateX(${(1 - rowIn) * 60}px)`,
-                  background: isEdit && count > 0 ? `rgba(47, 210, 154, ${0.12 * Math.min(1, count * 2)})` : undefined,
+                  background: isEdit && count > 0 ? `rgba(254, 243, 199, ${Math.min(1, count * 2)})` : undefined,
                   margin: "0 -20px",
                   padding: "0 20px",
                   borderRadius: 20,
@@ -213,17 +214,17 @@ export const DashboardScene: React.FC<{ v: Extract<Visual, { kind: "dashboard" }
                 <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
                   <Person size={66} />
                   <div>
-                    <div style={{ fontSize: 40, fontWeight: 800 }}>{r.name}</div>
+                    <div style={{ fontSize: 40, fontWeight: 700 }}>{r.name}</div>
                     <div style={{ fontSize: 28, color: c.muted }}>{r.role}</div>
                   </div>
                 </div>
                 <div
                   style={{
                     fontSize: 44,
-                    fontWeight: 800,
+                    fontWeight: 700,
                     padding: "14px 24px",
-                    borderRadius: 18,
                     border: `3px solid ${isEdit && frame > 54 ? c.accent : c.line}`,
+                    borderRadius: brand.buttonRadius,
                     transform: isEdit ? `scale(${click})` : undefined,
                     fontVariantNumeric: "tabular-nums",
                   }}
@@ -233,9 +234,9 @@ export const DashboardScene: React.FC<{ v: Extract<Visual, { kind: "dashboard" }
               </div>
             );
           })}
-          <div style={{ display: "flex", justifyContent: "space-between", borderTop: `2px solid ${c.line}`, paddingTop: 28, fontSize: 38, fontWeight: 800 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", borderTop: `2px solid ${c.line}`, paddingTop: 28, fontSize: 38, fontWeight: 700 }}>
             <span>Total this month</span>
-            <span style={{ color: c.primary, fontVariantNumeric: "tabular-nums" }}>{naira(Math.round(total / 500) * 500)}</span>
+            <span style={{ color: c.ink, background: brand.palette.amberPale, padding: "4px 14px", borderRadius: 8, fontVariantNumeric: "tabular-nums" }}>{naira(Math.round(total / 500) * 500)}</span>
           </div>
         </Card>
         {editRow >= 0 ? (
@@ -271,11 +272,11 @@ export const DocumentScene: React.FC<{ v: Extract<Visual, { kind: "document" }> 
       <div style={{ transform: `translateY(${(1 - enter) * 400}px) rotate(${(1 - enter) * -8}deg)`, opacity: enter, marginTop: 80, position: "relative" }}>
         <Card style={{ width: 820, padding: 60 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 20, marginBottom: 34 }}>
-            <div style={{ width: 70, height: 86, borderRadius: 12, background: c.primary }} />
-            <div style={{ fontSize: 56, fontWeight: 800 }}>{v.title}</div>
+            <IconCircle name="document" size={90} />
+            <div style={{ fontFamily: fonts.display, fontSize: 58, fontWeight: 700 }}>{v.title}</div>
           </div>
           {v.lines.map((l, i) => (
-            <div key={l} style={{ position: "relative", padding: "20px 12px", fontSize: 38, lineHeight: 1.3, color: i === v.highlight ? c.ink : c.muted, fontWeight: i === v.highlight ? 800 : 500 }}>
+            <div key={l} style={{ position: "relative", padding: "20px 12px", fontSize: 38, lineHeight: 1.3, color: i === v.highlight ? c.ink : c.text, fontWeight: i === v.highlight ? 800 : 500 }}>
               {i === v.highlight ? (
                 <div
                   style={{
@@ -284,7 +285,8 @@ export const DocumentScene: React.FC<{ v: Extract<Visual, { kind: "document" }> 
                     top: 10,
                     bottom: 10,
                     width: `${hl * 100}%`,
-                    background: "rgba(244, 181, 63, 0.45)",
+                    background: brand.palette.amberLight,
+                    opacity: 0.6,
                     borderRadius: 10,
                   }}
                 />

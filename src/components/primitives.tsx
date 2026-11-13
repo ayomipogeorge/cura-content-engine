@@ -1,19 +1,34 @@
 import React from "react";
+import {
+  BuildingOffice2Icon,
+  BuildingStorefrontIcon,
+  CheckIcon,
+  CreditCardIcon,
+  DocumentTextIcon,
+  FolderOpenIcon,
+  HeartIcon,
+  ShieldCheckIcon,
+} from "@heroicons/react/24/outline";
 import { brand, naira } from "../brand";
+import { fonts } from "../fonts";
 
 const c = brand.colors;
 
+/** White card with the Cura 4px (scaled) left amber border. */
 export const Card: React.FC<{
   children: React.ReactNode;
   style?: React.CSSProperties;
   dark?: boolean;
-}> = ({ children, style, dark }) => (
+  accent?: boolean;
+}> = ({ children, style, dark, accent = true }) => (
   <div
     style={{
-      background: dark ? c.ink : c.card,
-      color: dark ? c.paper : c.ink,
+      background: dark ? c.primaryMid : c.card,
+      color: dark ? c.card : c.ink,
       borderRadius: brand.radius,
       boxShadow: brand.shadow,
+      border: dark ? "none" : `2px solid ${brand.palette.lightGrey}`,
+      borderLeft: accent ? `${brand.cardAccent}px solid ${c.accent}` : undefined,
       padding: 36,
       ...style,
     }}
@@ -22,6 +37,29 @@ export const Card: React.FC<{
   </div>
 );
 
+/** DM Mono overline label, amber, tracked. */
+export const Overline: React.FC<{ children: React.ReactNode; size?: number; color?: string; style?: React.CSSProperties }> = ({
+  children,
+  size = 24,
+  color = c.accent,
+  style,
+}) => (
+  <div
+    style={{
+      fontFamily: fonts.mono,
+      fontWeight: 500,
+      fontSize: size,
+      letterSpacing: size * 0.22,
+      textTransform: "uppercase",
+      color,
+      ...style,
+    }}
+  >
+    {children}
+  </div>
+);
+
+/** Badges and status labels: pill-shaped (the guide's 20px radius). */
 export const Pill: React.FC<{
   children: React.ReactNode;
   tone?: "neutral" | "bad" | "good" | "dark";
@@ -29,10 +67,10 @@ export const Pill: React.FC<{
   style?: React.CSSProperties;
 }> = ({ children, tone = "neutral", size = 30, style }) => {
   const palette = {
-    neutral: { bg: "#EAF1EE", fg: c.primary },
-    bad: { bg: "#FDE4DF", fg: "#B23A26" },
-    good: { bg: "#D6F7EA", fg: "#0B6E4C" },
-    dark: { bg: c.ink, fg: c.paper },
+    neutral: { bg: brand.palette.amberPale, fg: c.ink },
+    bad: { bg: "#FEE2E2", fg: "#B91C1C" },
+    good: { bg: "#D1FAE5", fg: "#047857" },
+    dark: { bg: c.ink, fg: c.card },
   }[tone];
   return (
     <span
@@ -40,12 +78,14 @@ export const Pill: React.FC<{
         display: "inline-flex",
         alignItems: "center",
         gap: 10,
-        padding: `${size * 0.35}px ${size * 0.7}px`,
+        padding: `${size * 0.32}px ${size * 0.7}px`,
         borderRadius: 999,
         background: palette.bg,
         color: palette.fg,
+        fontFamily: fonts.body,
         fontSize: size,
-        fontWeight: 700,
+        fontWeight: 600,
+        letterSpacing: 0.3,
         whiteSpace: "nowrap",
         ...style,
       }}
@@ -55,68 +95,93 @@ export const Pill: React.FC<{
   );
 };
 
-/** A friendly, faceless staff icon. */
-export const Person: React.FC<{ size?: number; color?: string; badge?: string; badgeTone?: "bad" | "good" }> = ({
-  size = 90,
-  color = c.primary,
-  badge,
-  badgeTone = "bad",
-}) => (
-  <div style={{ position: "relative", width: size, height: size * 1.25 }}>
-    <svg viewBox="0 0 100 125" width={size} height={size * 1.25}>
-      <circle cx="50" cy="32" r="24" fill={color} />
-      <path d="M8 125 C8 80 30 66 50 66 C70 66 92 80 92 125 Z" fill={color} />
-    </svg>
-    {badge ? (
-      <div
-        style={{
-          position: "absolute",
-          right: -size * 0.1,
-          top: -size * 0.05,
-          width: size * 0.42,
-          height: size * 0.42,
-          borderRadius: "50%",
-          background: badgeTone === "bad" ? c.alert : c.accent,
-          border: `${Math.max(3, size * 0.05)}px solid ${c.paper}`,
-          color: "white",
-          fontSize: size * 0.24,
-          fontWeight: 800,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {badge}
-      </div>
-    ) : null}
+/** Primary button: amber fill, navy text, 4px (scaled) radius. */
+export const Button: React.FC<{ children: React.ReactNode; size?: number; variant?: "primary" | "secondary" | "done"; style?: React.CSSProperties }> = ({
+  children,
+  size = 40,
+  variant = "primary",
+  style,
+}) => {
+  const v = {
+    primary: { bg: c.accent, fg: c.ink, border: c.accent },
+    secondary: { bg: "transparent", fg: c.ink, border: c.ink },
+    done: { bg: c.success, fg: c.card, border: c.success },
+  }[variant];
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 14,
+        background: v.bg,
+        color: v.fg,
+        border: `3px solid ${v.border}`,
+        borderRadius: brand.buttonRadius,
+        fontFamily: fonts.body,
+        fontWeight: 600,
+        fontSize: size,
+        padding: `${size * 0.6}px ${size * 1.2}px`,
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+/** The Cura wordmark: Playfair Display Bold plus the "Health Wallet" overline. No effects. */
+export const Wordmark: React.FC<{ size?: number; onDark?: boolean }> = ({ size = 120, onDark }) => (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+    <div style={{ fontFamily: fonts.display, fontWeight: 700, fontSize: size, lineHeight: 1, color: onDark ? c.accent : c.ink }}>
+      {brand.name}
+    </div>
+    <Overline size={size * 0.13} color={onDark ? c.accent : c.ink} style={{ marginTop: size * 0.08, letterSpacing: size * 0.05 }}>
+      {brand.descriptor}
+    </Overline>
   </div>
 );
 
-export const CuraMark: React.FC<{ size?: number; light?: boolean }> = ({ size = 64, light }) => (
-  <div style={{ display: "flex", alignItems: "center", gap: size * 0.28 }}>
+/** A friendly, faceless staff icon in Cura navy tones. */
+export const Person: React.FC<{ size?: number; color?: string }> = ({ size = 90, color = c.primary }) => (
+  <svg viewBox="0 0 100 125" width={size} height={size * 1.25}>
+    <circle cx="50" cy="32" r="24" fill={color} />
+    <path d="M8 125 C8 80 30 66 50 66 C70 66 92 80 92 125 Z" fill={color} />
+  </svg>
+);
+
+const ICONS = {
+  wallet: CreditCardIcon,
+  provider: BuildingStorefrontIcon,
+  employer: BuildingOffice2Icon,
+  document: DocumentTextIcon,
+  folder: FolderOpenIcon,
+  plan: ShieldCheckIcon,
+  care: HeartIcon,
+  check: CheckIcon,
+} as const;
+export type IconName = keyof typeof ICONS;
+
+/** Heroicons outline inside a coloured circle: the Cura icon-in-circle motif. */
+export const IconCircle: React.FC<{ name: IconName; size?: number; dark?: boolean }> = ({ name, size = 90, dark }) => {
+  const Icon = ICONS[name];
+  return (
     <div
       style={{
         width: size,
         height: size,
-        borderRadius: size * 0.3,
-        background: light ? c.accent : c.primary,
+        borderRadius: "50%",
+        background: dark ? c.ink : brand.palette.amberPale,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexShrink: 0,
       }}
     >
-      <svg viewBox="0 0 40 40" width={size * 0.62} height={size * 0.62}>
-        <path
-          d="M20 33 C10 26 6 20 6 14.5 C6 10 9.5 7 13.5 7 C16.5 7 18.7 8.8 20 11 C21.3 8.8 23.5 7 26.5 7 C30.5 7 34 10 34 14.5 C34 20 30 26 20 33 Z"
-          fill={light ? c.ink : c.paper}
-        />
-      </svg>
+      <Icon style={{ width: size * 0.5, height: size * 0.5, color: dark ? c.accent : c.ink, strokeWidth: 1.5 }} />
     </div>
-    <span style={{ fontSize: size * 0.72, fontWeight: 800, letterSpacing: -1, color: light ? c.paper : c.ink }}>
-      {brand.name}
-    </span>
-  </div>
-);
+  );
+};
 
 export const WalletCard: React.FC<{
   name?: string;
@@ -131,47 +196,50 @@ export const WalletCard: React.FC<{
       style={{
         width,
         height: h,
-        borderRadius: width * 0.07,
-        background: `linear-gradient(135deg, ${c.primary} 0%, #0A4A3D 100%)`,
-        boxShadow: brand.shadow,
-        color: c.paper,
+        borderRadius: width * 0.045,
+        background: `linear-gradient(140deg, ${brand.palette.navyMid} 0%, ${brand.palette.navy} 100%)`,
+        boxShadow: brand.shadowElevated,
+        border: "2px solid rgba(255, 255, 255, 0.08)",
+        color: c.card,
         padding: width * 0.07,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         position: "relative",
         overflow: "hidden",
+        fontFamily: fonts.body,
         ...style,
       }}
     >
       <div
         style={{
           position: "absolute",
-          right: -width * 0.15,
-          top: -width * 0.2,
-          width: width * 0.6,
-          height: width * 0.6,
+          right: -width * 0.18,
+          top: -width * 0.22,
+          width: width * 0.62,
+          height: width * 0.62,
           borderRadius: "50%",
-          background: "rgba(47, 210, 154, 0.18)",
+          background: "rgba(255, 255, 255, 0.05)",
         }}
       />
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: width * 0.05, fontWeight: 700, opacity: 0.85 }}>Health Wallet</span>
-        <CuraMark size={width * 0.075} light />
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative" }}>
+        <Overline size={width * 0.036}>Health Wallet</Overline>
+        <div style={{ fontFamily: fonts.display, fontWeight: 700, fontSize: width * 0.07, color: c.accent }}>{brand.name}</div>
       </div>
-      <div>
-        <div style={{ fontSize: width * 0.04, opacity: 0.7, marginBottom: width * 0.01 }}>Balance</div>
+      <div style={{ position: "relative" }}>
+        <div style={{ fontSize: width * 0.038, opacity: 0.75, marginBottom: width * 0.012 }}>Your balance</div>
         <div
           style={{
-            fontSize: width * 0.105,
-            fontWeight: 800,
-            letterSpacing: -1,
+            fontSize: width * 0.1,
+            fontWeight: 700,
+            color: c.accent,
+            fontVariantNumeric: "tabular-nums",
             filter: blurAmount ? `blur(${width * 0.018}px)` : undefined,
           }}
         >
           {balance === undefined ? naira(30000) : naira(Math.round(balance))}
         </div>
-        <div style={{ fontSize: width * 0.045, fontWeight: 600, marginTop: width * 0.015 }}>{name}</div>
+        <div style={{ fontSize: width * 0.045, fontWeight: 500, marginTop: width * 0.015 }}>{name}</div>
       </div>
     </div>
   );
@@ -180,7 +248,7 @@ export const WalletCard: React.FC<{
 export const PlanCard: React.FC<{
   name: string;
   benefits?: string[];
-  matched?: number; // 0..1 visibility of the "Matched for you" tag
+  matched?: number; // 0..1 visibility of the "Matched for you" badge
   width?: number;
   dim?: boolean;
   style?: React.CSSProperties;
@@ -189,47 +257,28 @@ export const PlanCard: React.FC<{
     style={{
       width,
       background: c.card,
-      borderRadius: width * 0.08,
+      borderRadius: brand.radius,
+      borderLeft: `${brand.cardAccent}px solid ${c.accent}`,
       boxShadow: brand.shadow,
       padding: width * 0.075,
       color: c.ink,
       opacity: dim ? 0.45 : 1,
       position: "relative",
+      fontFamily: fonts.body,
       ...style,
     }}
   >
-    <div style={{ fontSize: width * 0.045, color: c.muted, fontWeight: 700, textTransform: "uppercase", letterSpacing: 1 }}>
-      HMO plan
-    </div>
-    <div style={{ fontSize: width * 0.095, fontWeight: 800, letterSpacing: -0.5, margin: `${width * 0.015}px 0 ${width * 0.04}px` }}>
-      {name}
-    </div>
+    <Overline size={width * 0.042}>HMO plan</Overline>
+    <div style={{ fontFamily: fonts.display, fontSize: width * 0.095, fontWeight: 600, margin: `${width * 0.02}px 0 ${width * 0.045}px` }}>{name}</div>
     {benefits.map((b) => (
-      <div key={b} style={{ display: "flex", alignItems: "center", gap: width * 0.03, fontSize: width * 0.055, marginBottom: width * 0.02 }}>
-        <span
-          style={{
-            width: width * 0.05,
-            height: width * 0.05,
-            borderRadius: "50%",
-            background: c.accent,
-            display: "inline-block",
-            flexShrink: 0,
-          }}
-        />
+      <div key={b} style={{ display: "flex", alignItems: "center", gap: width * 0.03, fontSize: width * 0.055, color: c.text, marginBottom: width * 0.022 }}>
+        <CheckIcon style={{ width: width * 0.06, height: width * 0.06, color: c.success, strokeWidth: 2.5, flexShrink: 0 }} />
         {b}
       </div>
     ))}
     {matched > 0 ? (
-      <div
-        style={{
-          position: "absolute",
-          top: -width * 0.06,
-          right: width * 0.06,
-          transform: `scale(${matched})`,
-          transformOrigin: "center",
-        }}
-      >
-        <Pill tone="good" size={width * 0.055}>
+      <div style={{ position: "absolute", top: -width * 0.055, right: width * 0.06, opacity: matched, transform: `translateY(${(1 - matched) * 12}px)` }}>
+        <Pill tone="neutral" size={width * 0.052}>
           Matched for you
         </Pill>
       </div>
@@ -237,19 +286,15 @@ export const PlanCard: React.FC<{
   </div>
 );
 
-/** A soft tick inside a circle. */
-export const Tick: React.FC<{ size?: number; progress?: number; color?: string }> = ({
-  size = 60,
-  progress = 1,
-  color = c.accent,
-}) => (
+/** Success tick in a circle (Success Green, white stroke). */
+export const Tick: React.FC<{ size?: number; progress?: number; color?: string }> = ({ size = 60, progress = 1, color = c.success }) => (
   <svg viewBox="0 0 60 60" width={size} height={size}>
     <circle cx="30" cy="30" r="28" fill={color} />
     <path
       d="M17 31 L26 40 L44 21"
       fill="none"
       stroke="white"
-      strokeWidth="6"
+      strokeWidth="5"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeDasharray="44"
@@ -258,31 +303,10 @@ export const Tick: React.FC<{ size?: number; progress?: number; color?: string }
   </svg>
 );
 
-/** Curved arrow used for callouts. */
-export const Arrow: React.FC<{ progress: number; width?: number; color?: string; flip?: boolean }> = ({
-  progress,
-  width = 200,
-  color = brand.colors.sun,
-  flip,
-}) => (
+/** Curved callout arrow in amber. */
+export const Arrow: React.FC<{ progress: number; width?: number; color?: string; flip?: boolean }> = ({ progress, width = 200, color = c.accent, flip }) => (
   <svg viewBox="0 0 200 120" width={width} height={width * 0.6} style={{ transform: flip ? "scaleX(-1)" : undefined }}>
-    <path
-      d="M10 100 C60 100 120 80 170 25"
-      fill="none"
-      stroke={color}
-      strokeWidth="10"
-      strokeLinecap="round"
-      strokeDasharray="220"
-      strokeDashoffset={220 * (1 - progress)}
-    />
-    <path
-      d="M140 22 L172 20 L168 52"
-      fill="none"
-      stroke={color}
-      strokeWidth="10"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      opacity={progress > 0.85 ? 1 : 0}
-    />
+    <path d="M10 100 C60 100 120 80 170 25" fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" strokeDasharray="220" strokeDashoffset={220 * (1 - progress)} />
+    <path d="M140 22 L172 20 L168 52" fill="none" stroke={color} strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" opacity={progress > 0.85 ? 1 : 0} />
   </svg>
 );

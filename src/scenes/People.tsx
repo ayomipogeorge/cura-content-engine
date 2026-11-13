@@ -21,7 +21,7 @@ export const PeopleScene: React.FC<{ v: Extract<Visual, { kind: "people" }> }> =
   });
   const lastPop = v.popOneByOne ? (v.count - 1) * 8 : 0;
   const flash = v.flashOnLast
-    ? interpolate(frame, [lastPop + 4, lastPop + 8, lastPop + 22], [0, 0.55, 0], {
+    ? interpolate(frame, [lastPop + 4, lastPop + 9, lastPop + 24], [0, 0.22, 0], {
         extrapolateLeft: "clamp",
         extrapolateRight: "clamp",
       })
@@ -80,7 +80,7 @@ const PersonCell: React.FC<{
   const pop = useSpringIn(popDelay, { damping: 11, stiffness: 160 });
   const badge = useSpringIn(badgeDelay ?? 99999, { damping: 12 });
   const tilt = shrug ? interpolate(frame, [50, 62], [0, index % 2 ? 9 : -9], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 0;
-  const tones = [c.primary, "#127A63", "#0E5A4A", "#1C8A70"];
+  const tones = [c.primary, c.primaryMid, "#24427A", c.primary];
   return (
     <div
       style={{
@@ -129,8 +129,8 @@ export const PersonasScene: React.FC<{ v: Extract<Visual, { kind: "personas" }> 
                 style={{
                   alignSelf: "center",
                   fontSize: 110,
-                  fontWeight: 800,
-                  color: c.primary,
+                  fontWeight: 700,
+                  color: c.accent,
                   opacity: interpolate(frame, [20, 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
                 }}
               >
@@ -167,7 +167,7 @@ const PersonaCard: React.FC<{
     >
       <Card style={{ width, display: "flex", flexDirection: "column", alignItems: "center", gap: 16, position: "relative" }}>
         <Person size={width * 0.38} />
-        <div style={{ fontSize: width * 0.1, fontWeight: 800, textAlign: "center" }}>{p.name}</div>
+        <div style={{ fontSize: width * 0.1, fontWeight: 700, textAlign: "center" }}>{p.name}</div>
         <div style={{ fontSize: width * 0.075, color: c.muted }}>{p.detail}</div>
         {p.chips ? (
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center" }}>

@@ -62,7 +62,7 @@ export const presentationFor = (name: TransitionName, index: number): Transition
 
 export const transitionTiming = linearTiming({
   durationInFrames: TRANSITION_FRAMES,
-  easing: Easing.bezier(0.65, 0, 0.35, 1),
+  easing: Easing.bezier(0.4, 0, 0.2, 1), // brand "emphasis" curve
 });
 
 export const DEFAULT_CYCLE: TransitionName[] = ["push", "wipe", "iris", "slide"];
