@@ -1,6 +1,6 @@
 # Cura Content Engine
 
-Turns Cura's video scripts into finished motion-explainer videos: native 4K vertical (2160 × 3840), scene-to-scene handoff transitions, burned-in captions, Gemini voiceover, a generated sound kit and a loudness master ready for social.
+Turns Cura's video scripts into finished motion-explainer videos: native 4K vertical (2160 × 3840), scene-to-scene handoff transitions, burned-in captions, Gemini voiceover, a quiet generated sound bed and a loudness master ready for social.
 
 Built with [Remotion](https://www.remotion.dev) (React for video). Scripts and on-screen claims follow the **Cura Content System** doc.
 
@@ -75,7 +75,16 @@ Scenes with `kind: "clip"` play `public/clips/<file>`. Generate a 4–8 s vertic
 
 ## Brand
 
-`src/brand.ts` holds the colours, radius and shadow. **The palette is a placeholder** until Cura's official colours are confirmed; changing it restyles every video. The font is Plus Jakarta Sans (SIL Open Font License), bundled in `public/fonts`. To use Cura's typeface, replace those files and the family in `src/fonts.ts`. The logo mark in `src/components/primitives.tsx` (`CuraMark`) is also a placeholder.
+Everything follows the **Cura Brand Identity Guide v1.0** (March 2026). The tokens live in `src/brand.ts`:
+
+- **Colours:** Cura Navy `#0F1F3D` and Off-White Cream `#F8F6F1` for scenes, Cura Amber `#F59E0B` only as an accent (always navy text on amber), Success Green for "Paid" and ticks, Error Red for problems.
+- **Type:** Playfair Display for the wordmark and headlines, DM Sans for captions and UI, DM Mono for the amber overline labels. All three are bundled in `public/fonts` (SIL Open Font License).
+- **Components:** cards carry the amber left-border motif; buttons have small rounded corners, never pills; badges are pills; icons are Heroicons outline inside circles.
+- **Motion:** calm ease-out entrances, ease-in-out for emphasis, no bounce, no elastic, no linear. Numbers count up when a balance appears; success states pulse once.
+- **End cards:** navy, with the amber Playfair wordmark.
+- **Sound:** a quiet ambient bed and a soft air under scene transitions only. No click or "paid" sound effects, because the guide rules out sound effects for interactions.
+
+Guide sizes are scaled about 2.4x for the 1080 × 1920 video canvas, so they read the same on a phone.
 
 ## Claims
 
