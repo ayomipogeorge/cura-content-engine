@@ -1,1 +1,34 @@
-{}
+{
+  "s02-provider-paid-today": {
+    "treated": {
+      "file": "vo/s02-provider-paid-today/treated.wav",
+      "seconds": 1.598,
+      "hash": "df1dbec859fd"
+    },
+    "months": {
+      "file": "vo/s02-provider-paid-today/months.wav",
+      "seconds": 2.792,
+      "hash": "989c83340d7d"
+    },
+    "dont-wait": {
+      "file": "vo/s02-provider-paid-today/dont-wait.wav",
+      "seconds": 4.942,
+      "hash": "58dd6f0b8a12"
+    },
+    "paid-today": {
+      "file": "vo/s02-provider-paid-today/paid-today.wav",
+      "seconds": 9.131,
+      "hash": "7af189ba0536"
+    },
+    "join": {
+      "file": "vo/s02-provider-paid-today/join.wav",
+      "seconds": 1.505,
+      "hash": "b94a6e3392f6"
+    },
+    "end": {
+      "file": "vo/s02-provider-paid-today/end.wav",
+      "seconds": 4.485,
+      "hash": "851c09b6dde4"
+    }
+  }
+}
