@@ -30,5 +30,17 @@
       "seconds": 4.485,
       "hash": "851c09b6dde4"
     }
+  },
+  "s03-plan-match-same-budget": {
+    "same-budget": {
+      "file": "vo/s03-plan-match-same-budget/same-budget.wav",
+      "seconds": 4.702,
+      "hash": "86f8133a320c"
+    },
+    "different-needs": {
+      "file": "vo/s03-plan-match-same-budget/different-needs.wav",
+      "seconds": 7.973,
+      "hash": "9cd73d2767df"
+    }
   }
 }
