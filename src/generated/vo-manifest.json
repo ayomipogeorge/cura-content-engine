@@ -41,6 +41,26 @@
       "file": "vo/s03-plan-match-same-budget/different-needs.wav",
       "seconds": 7.973,
       "hash": "9cd73d2767df"
+    },
+    "cura-matches": {
+      "file": "vo/s03-plan-match-same-budget/cura-matches.wav",
+      "seconds": 5.691,
+      "hash": "c5a90b462207"
+    },
+    "two-plans": {
+      "file": "vo/s03-plan-match-same-budget/two-plans.wav",
+      "seconds": 10.552,
+      "hash": "d992c9edd908"
+    },
+    "choose": {
+      "file": "vo/s03-plan-match-same-budget/choose.wav",
+      "seconds": 3.516,
+      "hash": "0de669ea695d"
+    },
+    "end": {
+      "file": "vo/s03-plan-match-same-budget/end.wav",
+      "seconds": 3.918,
+      "hash": "f9bb119ac246"
     }
   }
 }
