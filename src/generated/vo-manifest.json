@@ -62,5 +62,37 @@
       "seconds": 3.918,
       "hash": "f9bb119ac246"
     }
+  },
+  "s04-five-staff-rule": {
+    "five-staff": {
+      "file": "vo/s04-five-staff-rule/five-staff.wav",
+      "seconds": 4.753,
+      "hash": "93a3b453a505"
+    },
+    "the-law": {
+      "file": "vo/s04-five-staff-rule/the-law.wav",
+      "seconds": 9.483,
+      "hash": "03a334d0e1d2"
+    },
+    "accredited-hmo": {
+      "file": "vo/s04-five-staff-rule/accredited-hmo.wav",
+      "seconds": 5.704,
+      "hash": "35c1418ddd6d"
+    },
+    "one-plan": {
+      "file": "vo/s04-five-staff-rule/one-plan.wav",
+      "seconds": 5.594,
+      "hash": "66da79aa7744"
+    },
+    "cura-way": {
+      "file": "vo/s04-five-staff-rule/cura-way.wav",
+      "seconds": 10.486,
+      "hash": "4090911325a5"
+    },
+    "end": {
+      "file": "vo/s04-five-staff-rule/end.wav",
+      "seconds": 5.466,
+      "hash": "f6b373385036"
+    }
   }
 }
