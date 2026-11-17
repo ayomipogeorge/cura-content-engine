@@ -94,5 +94,32 @@
       "seconds": 5.466,
       "hash": "f6b373385036"
     }
+  },
+  "s05-what-is-a-health-wallet": {
+    "what": {
+      "file": "vo/s05-what-is-a-health-wallet/what.wav",
+      "seconds": 3.749,
+      "hash": "abf9f4ce378b"
+    },
+    "employer-funds": {
+      "file": "vo/s05-what-is-a-health-wallet/employer-funds.wav",
+      "seconds": 4.396,
+      "hash": "4c0517616e9c"
+    },
+    "you-decide": {
+      "file": "vo/s05-what-is-a-health-wallet/you-decide.wav",
+      "seconds": 5.83,
+      "hash": "926578c59189"
+    },
+    "pay": {
+      "file": "vo/s05-what-is-a-health-wallet/pay.wav",
+      "seconds": 4.097,
+      "hash": "3180e9bc700f"
+    },
+    "end": {
+      "file": "vo/s05-what-is-a-health-wallet/end.wav",
+      "seconds": 3.259,
+      "hash": "7d82ab44bcdd"
+    }
   }
 }
